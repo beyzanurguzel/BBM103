@@ -1,8 +1,7 @@
 import sys
 
 
-def find_empty_spaces(sudoku, output_file):
-    step = 0
+def find_empty_spaces(sudoku, output_file, step):
     # we try to find an empty cell
     for i in range(9):
         for j in range(9):
@@ -26,7 +25,7 @@ def find_empty_spaces(sudoku, output_file):
                         output_file.write("\n")
                     # then we leave the loop and start a new one by calling the function again.
                     # because there might appear a cell with only one possibility before our completed cell
-                    find_empty_spaces(sudoku, output_file)
+                    find_empty_spaces(sudoku, output_file, step)
 
 
 def finding_value(sudoku, row, column):
@@ -38,12 +37,12 @@ def finding_value(sudoku, row, column):
         for testing in range(9):
             if sudoku[row][testing] == value:
                 misplace = True
-        # if there is no cell which is equal to our value in the row we test columns
+        # if there is no cell which is equal to our value in the row, we test columns
         if not misplace:
             for testing in range(9):
                 if sudoku[testing][column] == value:
                     misplace = True
-            # then we test the square which the cell belongs
+            # then, we test the square which the cell belongs
             if not misplace:
                 new_column = column - (column % 3)
                 new_row = row - (row % 3)
@@ -51,11 +50,11 @@ def finding_value(sudoku, row, column):
                     for square_column in range(3):
                         if sudoku[new_row + square_row][new_column + square_column] == value:
                             misplace = True
-        # if the value fits the cell we append it to our list to make sure if there are no other values fit the cell
+        # if the value fits the cell we append it to our list to make sure if there are no other values which fit the cell
         if not misplace:
             list1.append(value)
         value += 1
-    #if the list have more than one elements it means we cannot put a value on it
+    # if the list have more than one element, it means we cannot put a value on it
     if len(list1) == 1:
         sudoku[row][column] = list1[0]
         # for writing the value in other function we return the value
@@ -73,8 +72,8 @@ def main():
             sudoku_board.append([int(value) for value in row.split()])
 
     with open(sys.argv[2], "w") as output_file:
-        find_empty_spaces(sudoku_board, output_file)
-        # we write 18 times '-' character at the end of the output file tı show that steps are finished
+        find_empty_spaces(sudoku_board, output_file, 0)
+        # we write 18 times '-' character at the end of the output file to show that steps are finished
         output_file.write('-' * 18)
 
 
